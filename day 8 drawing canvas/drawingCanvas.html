@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>drawing canvas</title>
+</head>
+<body>
+    
+    <div class="controls">
+        <label for="mode">Brush Mode</label>
+        <select id="mode" value="Normal" onchange="updateMode()">
+          <option>Normal</option>
+          <option>Multiply</option>
+          <option>lighten</option>
+          <option>Screen</option>
+        </select>
+        <label for="brushSize">Brush Size:</label>
+        <input id="size" type="range" name='brushSize' min="2" max="100" value="18"  onchange="changeSize()" >
+        <label for="brushColor">Brush Color</label>
+        <input id="color" type="color" name='brushColor' value="#cccaca"  onchange = "changeColor()">
+        
+    </div>
+    <button onclick="download()">Download</button>
+    <canvas id="draw" width="800" height="500"></canvas>
+<script>
+    const canvas = document.querySelector('#draw');
+    const ctx = canvas.getContext('2d');
+    canvas.width= window.innerWidth;
+    canvas.height=window.innerHeight;
+
+    ctx.strokeStyle = '#cccaca';
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.lineWidth= 10;
+    ctx.globalCompositeOperation = 'new content';
+
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+  
+    let direction = true
+
+    function draw(e){
+        if (!isDrawing) return 
+            ctx.beginPath();
+            ctx.moveTo(lastX,lastY);
+            ctx.lineTo(e.offsetX,e.offsetY);
+            ctx.stroke();
+            [lastX,lastY]= [e.offsetX,e.offsetY]
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+        isDrawing =true;
+        [lastX,lastY]= [e.offsetX,e.offsetY];
+    });
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', () => isDrawing = false);
+    canvas.addEventListener('mouseout', () => isDrawing = false);
+    
+
+    function changeColor(){
+        const color = document.querySelector('#color');
+        ctx.strokeStyle = color.value;  
+    }
+    function changeSize(){
+        const size = document.querySelector('#size');
+        ctx.lineWidth = size.value;    
+    }
+    
+    function updateMode() {
+        const mode = document.querySelector('#mode');
+        if (mode.value =='Normal'){
+            console.log('normal');
+            ctx.globalCompositeOperation = 'source-over';
+        } else if (mode.value === 'Multiply') {
+            console.log('Multiply');
+            ctx.globalCompositeOperation = 'multiply';
+    
+        } else if (mode.value === 'lighten') {
+            console.log('lighten');
+            ctx.globalCompositeOperation = 'lighten';
+        
+        } else if (mode.value === 'Screen') {
+            console.log('screen');
+            ctx.globalCompositeOperation = 'screen';
+          
+        }
+      }
+    
+      function download(){
+        var image = canvas.toDataURL();  
+        var downloadLink = document.createElement( 'a' );  
+        downloadLink.download = 'image.png'; 
+        downloadLink.href = image;  
+        document.body.appendChild( downloadLink );  
+        downloadLink.click();  
+        document.body.removeChild( downloadLink ); 
+      }
+
+</script>
+
+
+<style>
+  html, body {
+    margin: 0;
+  }
+ 
+    body{
+        text-align: center;
+        background-color: #f7f7f7;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 100px;
+        font-size: 20px
+    }
+ 
+</style>
+
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Updating Css with Js</title>
+</head>
+<body>
+    <h2>Updating Css variables with JS</h2>
+
+    <div class="controls">
+        
+        <label for="baseColor">Text Color</label>
+        <input type="color" name="baseColor" value="#ffc600"/>
+
+        <label for="baseColor">Font Size</label>
+        <input type="range" name="fontsize" min="15" max="50" value="18" data-sizing="px"/>
+
+    </div>
+
+    <div class="random">
+        <p>Todays challenge was quite interesting i learned something new</p>
+    </div>
+
+
+<style>
+    :root{
+        --baseColor: #ffc600;
+        --fontsize: 16px;
+    }
+    body{
+        text-align: center;
+        background-color: rgb(122, 181, 161);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 100px;
+        font-size: 20px
+    }
+    .random{
+        font-size: var(--fontsize);
+        color: var(--baseColor);
+    }
+</style>
+
+<script>
+    const inputs = document.querySelectorAll('.controls input')
+
+    function handleUpdate(){
+        const suffix = this.dataset.sizing || '';
+        document.documentElement.style.setProperty(`--${this.name}`, this.value +suffix)
+    }
+
+    inputs.forEach(inputs => inputs.addEventListener('change', handleUpdate));
+    inputs.forEach(inputs => inputs.addEventListener('mousemove', handleUpdate));
+</script>
+</body>
+</html>
