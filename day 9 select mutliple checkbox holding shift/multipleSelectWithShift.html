@@ -107,7 +107,7 @@
         let inBetween = false; 
         if (e.shiftKey && this.checked){
             checkboxes.forEach(checkbox => {
-            if (checkbox === this || checkbox === lastChecked){
+            if (checkbox === this || checkbox === firstChecked){
                 inBetween = !inBetween;
             }
             if (inBetween){
@@ -115,7 +115,7 @@
             }
             })
         }
-        lastChecked = this;
+        firstChecked = this;
 
     }
     const checkboxes = document.querySelectorAll('.inbox input[type="checkbox"]');
